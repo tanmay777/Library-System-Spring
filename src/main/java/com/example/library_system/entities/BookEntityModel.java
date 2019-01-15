@@ -1,14 +1,34 @@
 package com.example.library_system.entities;
 
-public class BookEntityModel {
-    String bookName;
-    String author;
-    int bookId;
+import javax.persistence.*;
 
-    public BookEntityModel(String bookName, String author, int bookId) {
+
+//We could also emit the @Table annotation.
+//Then it would have assumed the class name as the table's name.
+//We could have also emitted @Column annotation. In that case,
+// it would have assumed that the column name are same as the name off the variable
+
+@Entity
+@Table(name="Book")
+public class BookEntityModel {
+
+    public BookEntityModel() {
+    }
+    //This constructor will be used by JPA
+
+    @Column(name = "Name", nullable = false)
+    String bookName;
+
+    @Column(name = "Author", nullable = false)
+    String author;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long bookId;
+
+    public BookEntityModel(String bookName, String author) {
         this.bookName = bookName;
         this.author = author;
-        this.bookId = bookId;
     }
 
     public String getBookName() {
@@ -27,11 +47,11 @@ public class BookEntityModel {
         this.author = author;
     }
 
-    public int getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
 }
