@@ -34,7 +34,14 @@ public class BookServiceImplementation implements BookService {
     @Override
     public int deleteBook(Long id) {
         try {
-            bookRepository.delete(bookRepository.findById(id).get());
+            if(bookRepository.existsById(id)) {
+                bookRepository.delete(bookRepository.findById(id).get());
+
+            }
+            else{
+                System.out.println("This book does not exists");
+
+            }
             return 1;
         } catch (Exception e) {
             return 0;
@@ -44,9 +51,14 @@ public class BookServiceImplementation implements BookService {
     @Override
     public int updateBook(Long id, String name) {
         try {
-            BookEntityModel bookEntityModel=bookRepository.findById(id).get();
-            bookEntityModel.setBookName(name);
-            bookRepository.save(bookEntityModel);
+            if(bookRepository.existsById(id)){
+                BookEntityModel bookEntityModel=bookRepository.findById(id).get();
+                bookEntityModel.setBookName(name);
+                bookRepository.save(bookEntityModel);
+            }
+            else{
+                System.out.println("This book does not exists");
+            }
             return 1;
         } catch (Exception e) {
             return 0;

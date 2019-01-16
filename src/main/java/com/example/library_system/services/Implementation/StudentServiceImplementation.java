@@ -19,9 +19,11 @@ public class StudentServiceImplementation implements StudentService {
 
         try {
             StudentEntityModel studentEntityModel = new StudentEntityModel(name, 0L);
+            System.out.println(studentEntityModel);
             studentRepository.save(studentEntityModel);
             return 1;
         } catch (Exception e) {
+            System.out.println(e.toString());
             return 0;
         }
 
@@ -38,7 +40,11 @@ public class StudentServiceImplementation implements StudentService {
     @Override
     public int deleteStudent(Long id) {
         try {
-            studentRepository.deleteById(id);
+            if(studentRepository.existsById(id))
+                studentRepository.deleteById(id);
+            else{
+                System.out.println("Student of this id does not exists");
+            }
             return 1;
         } catch (Exception e) {
             return 0;
@@ -50,8 +56,13 @@ public class StudentServiceImplementation implements StudentService {
         try {
             Optional<StudentEntityModel> studentEntityModel = studentRepository.findById(student_id);
             //Add condition to ensure that the studentEntityModel is present
-            studentEntityModel.get().setRentedBookId(book_id);
-            studentRepository.save(studentEntityModel.get());
+            if(studentEntityModel.isPresent()) {
+                studentEntityModel.get().setRentedBookId(book_id);
+                studentRepository.save(studentEntityModel.get());
+            }
+            else {
+                System.out.println("Student of this id does not exists");
+            }
             return 1;
         } catch (Exception e) {
             return 0;
@@ -63,8 +74,13 @@ public class StudentServiceImplementation implements StudentService {
         try {
             Optional<StudentEntityModel> studentEntityModel = studentRepository.findById(id);
             //Add condition to ensure that the studentEntityModel is present
-            studentEntityModel.get().setName(name);
-            studentRepository.save(studentEntityModel.get());
+            if(studentEntityModel.isPresent()) {
+                studentEntityModel.get().setName(name);
+                studentRepository.save(studentEntityModel.get());
+            }
+            else {
+                System.out.println("Student of this id does not exists");
+            }
             return 1;
         } catch (Exception e) {
             return 0;

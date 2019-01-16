@@ -6,15 +6,17 @@ import com.example.library_system.services.BookService;
 import com.example.library_system.services.Implementation.BookServiceImplementation;
 import com.example.library_system.services.Implementation.StudentServiceImplementation;
 import com.example.library_system.services.StudentService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
 
+    @Autowired
+    StudentService studentService;
     private static final String SUCCESS_STATUS = "success";
     private static final String ERROR_STATUS = "error";
     private static final int CODE_SUCCESS = 100;
@@ -22,24 +24,34 @@ public class StudentController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ServerResponseEntityModel createStudent(@RequestParam(value = "name") String name) {
-        int result = new StudentServiceImplementation().createStudent(name);
+        int result = studentService.createStudent(name);
+        System.out.println(name);
 
         if (result == 1) {
             return new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
         } else {
             return new ServerResponseEntityModel(ERROR_STATUS, AUTH_FAILURE);
         }
+    }
 
+    @RequestMapping(value = "/hello",method = RequestMethod.GET)
+    public String greeting(){
+        return "Working";
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public StudentEntityModel getStudent(@RequestParam(value = "id") Long id) {
-        return new StudentServiceImplementation().getStudent(id).get();
+    public String getStudent(@RequestParam(value = "id") Long id) {
+        Optional<StudentEntityModel> studentEntityModel=studentService.getStudent(id);
+        if(studentEntityModel.isPresent())
+            return studentEntityModel.toString();
+        else
+            return "No Such Student Exists";
+
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ServerResponseEntityModel deleteStudent(@RequestParam(value = "id") Long id) {
-        int result = new StudentServiceImplementation().deleteStudent(id);
+        int result = studentService.deleteStudent(id);
 
         if (result == 1) {
             return new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
@@ -50,14 +62,24 @@ public class StudentController {
 
     @RequestMapping(value = "/updateRentedBook", method = RequestMethod.PUT)
     public ServerResponseEntityModel updateRentedBook(@RequestParam(value = "student_id") Long student_id,@RequestParam(value = "book_id") Long book_id) {
-        ServerResponseEntityModel serverResponseEntityModel = new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
-        return serverResponseEntityModel;
+
+        int result = studentService.updateRentedBook(student_id,book_id);
+        if (result == 1) {
+            return new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
+        } else {
+            return new ServerResponseEntityModel(ERROR_STATUS, AUTH_FAILURE);
+        }
     }
 
     @RequestMapping(value = "/updateName", method = RequestMethod.PUT)
     public ServerResponseEntityModel updateName(@RequestParam(value = "id") Long id,@RequestParam(value = "name") String name) {
-        ServerResponseEntityModel serverResponseEntityModel = new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
-        return serverResponseEntityModel;
+
+        int result = studentService.updateName(id,name);
+        if (result == 1) {
+            return new ServerResponseEntityModel(SUCCESS_STATUS, CODE_SUCCESS);
+        } else {
+            return new ServerResponseEntityModel(ERROR_STATUS, AUTH_FAILURE);
+        }
     }
 
 }

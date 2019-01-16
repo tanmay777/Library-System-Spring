@@ -12,7 +12,7 @@ public interface StudentService {
 
     int deleteStudent(Long id);
 
-    int updateRentedBook(Long student_id,Long book_id);
+    int updateRentedBook(Long student_id, Long book_id);
 
     int updateName(Long id, String name);
 }

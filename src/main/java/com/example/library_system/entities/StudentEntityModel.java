@@ -13,12 +13,15 @@ public class StudentEntityModel {
     @Column(name = "Name",nullable = false)
     private String name;
 
-    @Column(name = "Name",nullable = false)
+    @Column(name = "rentedBookId",nullable = false)
     private Long rentedBookId;
 
     public StudentEntityModel(String name, Long rentedBookId) {
         this.name = name;
         this.rentedBookId = rentedBookId;
+    }
+
+    public StudentEntityModel() {
     }
 
     public void setStudentId(Long studentId) {
@@ -46,5 +49,8 @@ public class StudentEntityModel {
         return name;
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

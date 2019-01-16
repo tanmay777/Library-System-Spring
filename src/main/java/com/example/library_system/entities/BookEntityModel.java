@@ -54,4 +54,9 @@ public class BookEntityModel {
     public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
