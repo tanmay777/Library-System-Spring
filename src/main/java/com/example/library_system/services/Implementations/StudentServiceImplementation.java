@@ -1,8 +1,11 @@
-package com.example.library_system.services.Implementation;
+package com.example.library_system.services.Implementations;
 
+import com.example.library_system.bos.StudentBoModel;
+import com.example.library_system.convertors.StudentMapper;
 import com.example.library_system.entities.StudentEntityModel;
 import com.example.library_system.repositories.StudentRepository;
 import com.example.library_system.services.StudentService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +17,18 @@ public class StudentServiceImplementation implements StudentService {
     @Autowired
     StudentRepository studentRepository;
 
+//    @Autowired
+//    StudentMapper studentMapper;
+
+    //TODO: Check why we cannot @autowire it
+    StudentMapper studentMapper = Mappers.getMapper(StudentMapper.class);
+
     @Override
     public int createStudent(String name) {
-
         try {
-            StudentEntityModel studentEntityModel = new StudentEntityModel(name, 0L);
-            System.out.println(studentEntityModel);
-            studentRepository.save(studentEntityModel);
+            StudentBoModel studentBoModel = new StudentBoModel(name, 0L);
+            System.out.println(studentBoModel.toString());
+            studentRepository.save(studentMapper.studentBoToStudentEntity(studentBoModel));
             return 1;
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -31,7 +39,6 @@ public class StudentServiceImplementation implements StudentService {
 
     @Override
     public Optional<StudentEntityModel> getStudent(Long id) {
-
         Optional<StudentEntityModel> studentEntityModel = studentRepository.findById(id);
         return studentEntityModel;
 
@@ -57,8 +64,9 @@ public class StudentServiceImplementation implements StudentService {
             Optional<StudentEntityModel> studentEntityModel = studentRepository.findById(student_id);
             //Add condition to ensure that the studentEntityModel is present
             if(studentEntityModel.isPresent()) {
-                studentEntityModel.get().setRentedBookId(book_id);
-                studentRepository.save(studentEntityModel.get());
+                StudentBoModel studentBoModel=studentMapper.studentEntityToStudentBoMapper(studentEntityModel.get());
+                studentBoModel.setRentedBookId(book_id);
+                studentRepository.save(studentMapper.studentBoToStudentEntity(studentBoModel));
             }
             else {
                 System.out.println("Student of this id does not exists");
@@ -75,8 +83,9 @@ public class StudentServiceImplementation implements StudentService {
             Optional<StudentEntityModel> studentEntityModel = studentRepository.findById(id);
             //Add condition to ensure that the studentEntityModel is present
             if(studentEntityModel.isPresent()) {
-                studentEntityModel.get().setName(name);
-                studentRepository.save(studentEntityModel.get());
+                StudentBoModel studentBoModel = studentMapper.studentEntityToStudentBoMapper(studentEntityModel.get());
+                studentBoModel.setName(name);
+                studentRepository.save(studentMapper.studentBoToStudentEntity(studentBoModel));
             }
             else {
                 System.out.println("Student of this id does not exists");
@@ -87,3 +96,6 @@ public class StudentServiceImplementation implements StudentService {
         }
     }
 }
+
+
+//TODO: Confirm whether the usage of bo here is ok or not.

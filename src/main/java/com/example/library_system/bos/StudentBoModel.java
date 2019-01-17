@@ -1,10 +1,10 @@
-package com.example.library_system.entities;
+package com.example.library_system.bos;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Student")
-public class StudentEntityModel{
+public class StudentBoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,16 +40,11 @@ public class StudentEntityModel{
         return rentedBookId;
     }
 
-    public StudentEntityModel() {
+    public StudentBoModel() {
     }
 
-    public StudentEntityModel(String name, Long rentedBookId) {
+    public StudentBoModel(String name, Long rentedBookId) {
         this.name = name;
         this.rentedBookId = rentedBookId;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

@@ -1,8 +1,11 @@
-package com.example.library_system.services.Implementation;
+package com.example.library_system.services.Implementations;
 
+import com.example.library_system.bos.BookBoModel;
+import com.example.library_system.convertors.BookMapper;
 import com.example.library_system.entities.BookEntityModel;
 import com.example.library_system.repositories.BookRepository;
 import com.example.library_system.services.BookService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ public class BookServiceImplementation implements BookService {
 
     @Autowired
     BookRepository bookRepository;
+
+    BookMapper bookMapper= Mappers.getMapper(BookMapper.class);
 
     @Override
     public int createBook(String bookName,String author) {
@@ -35,8 +40,8 @@ public class BookServiceImplementation implements BookService {
     public int deleteBook(Long id) {
         try {
             if(bookRepository.existsById(id)) {
-                bookRepository.delete(bookRepository.findById(id).get());
-
+                BookBoModel bookBoModel = bookMapper.bookEntityModelToBookBoModel(bookRepository.findById(id).get());
+                bookRepository.delete(bookMapper.bookBoModelToBookEntityModel(bookBoModel));
             }
             else{
                 System.out.println("This book does not exists");
@@ -52,9 +57,9 @@ public class BookServiceImplementation implements BookService {
     public int updateBook(Long id, String name) {
         try {
             if(bookRepository.existsById(id)){
-                BookEntityModel bookEntityModel=bookRepository.findById(id).get();
-                bookEntityModel.setBookName(name);
-                bookRepository.save(bookEntityModel);
+                BookBoModel bookBoModel = bookMapper.bookEntityModelToBookBoModel(bookRepository.findById(id).get());
+                bookBoModel.setBookName(name);
+                bookRepository.save(bookMapper.bookBoModelToBookEntityModel(bookBoModel));
             }
             else{
                 System.out.println("This book does not exists");

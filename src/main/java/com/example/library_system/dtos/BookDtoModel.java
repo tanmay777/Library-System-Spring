@@ -1,4 +1,4 @@
-package com.example.library_system.entities;
+package com.example.library_system.dtos;
 
 import javax.persistence.*;
 
@@ -9,8 +9,8 @@ import javax.persistence.*;
 // it would have assumed that the column name are same as the name off the variable
 
 @Entity
-@Table(name = "Book")
-public class BookEntityModel {
+@Table(name="Book")
+public class BookDtoModel{
 
     @Column(name = "Name", nullable = false)
     String bookName;
@@ -46,11 +46,12 @@ public class BookEntityModel {
         return bookId;
     }
 
-    public BookEntityModel() {
+    public BookDtoModel() {
     }
 
-    public BookEntityModel(String bookName, String author) {
+    public BookDtoModel(String bookName, String author) {
         this.bookName = bookName;
         this.author = author;
     }
+
 }

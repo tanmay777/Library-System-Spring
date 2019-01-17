@@ -1,9 +1,8 @@
 package com.example.library_system.controllers;
 
 import com.example.library_system.entities.BookEntityModel;
-import com.example.library_system.entities.ServerResponseEntityModel;
+import com.example.library_system.models.ServerResponseEntityModel;
 import com.example.library_system.services.BookService;
-import com.example.library_system.services.Implementation.BookServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +36,7 @@ public class BookController {
     public String getBook(@RequestParam(value = "id") Long id) {
         Optional<BookEntityModel> bookEntityModel= bookService.getBook(id);
         if(bookEntityModel.isPresent())
-            return bookEntityModel.toString();
+            return "Bookid: "+bookEntityModel.get().getBookId()+"\nAuthor: "+bookEntityModel.get().getAuthor()+ "\nName: "+bookEntityModel.get().getBookName();
         else
             return "This book does not exists";
 

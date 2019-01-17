@@ -1,10 +1,7 @@
 package com.example.library_system.controllers;
 
-import com.example.library_system.entities.ServerResponseEntityModel;
+import com.example.library_system.models.ServerResponseEntityModel;
 import com.example.library_system.entities.StudentEntityModel;
-import com.example.library_system.services.BookService;
-import com.example.library_system.services.Implementation.BookServiceImplementation;
-import com.example.library_system.services.Implementation.StudentServiceImplementation;
 import com.example.library_system.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +14,7 @@ public class StudentController {
 
     @Autowired
     StudentService studentService;
+    
     private static final String SUCCESS_STATUS = "success";
     private static final String ERROR_STATUS = "error";
     private static final int CODE_SUCCESS = 100;
@@ -43,7 +41,7 @@ public class StudentController {
     public String getStudent(@RequestParam(value = "id") Long id) {
         Optional<StudentEntityModel> studentEntityModel=studentService.getStudent(id);
         if(studentEntityModel.isPresent())
-            return studentEntityModel.toString();
+            return "name:" +studentEntityModel.get().getName() + "\nid: "+studentEntityModel.get().getStudentId()+ "\nrentedBookId: "+studentEntityModel.get().getRentedBookId();
         else
             return "No Such Student Exists";
 

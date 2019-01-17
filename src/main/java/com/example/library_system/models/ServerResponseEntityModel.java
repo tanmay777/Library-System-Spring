@@ -1,7 +1,7 @@
-package com.example.library_system.DTOs;
+package com.example.library_system.models;
 
-public class ServerResponseDTOModel {
-    public ServerResponseDTOModel(String status, Integer code) {
+public class ServerResponseEntityModel {
+    public ServerResponseEntityModel(String status, Integer code) {
         this.status = status;
         this.code = code;
     }
